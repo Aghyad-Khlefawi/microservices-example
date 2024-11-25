@@ -15,7 +15,7 @@ public class CreateCorporate:IEndpoint
       var corp = Corporate.Create(request.Name);
       await mongoClient.GetCorporatesCollection().InsertOneAsync(corp);
       return TypedResults.Ok(new CreateCorporateResponse(corp.Id));
-    }).WithRequestValidation<Validator>();
+    }).WithRequestValidation<CreateCorporateRequest>();
 
   public record CreateCorporateResponse(string Id);
   public record CreateCorporateRequest(string Name);
