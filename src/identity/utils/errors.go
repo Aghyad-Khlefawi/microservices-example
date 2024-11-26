@@ -6,8 +6,7 @@ import (
 )
 
 func LogFatalError(message string, err error) {
-	wrapped := fmt.Errorf(message + " -- %w",err)
-	log.Print(wrapped)
+	wrapped:= LogError(message,err)
 	panic(wrapped)
 }
 
@@ -15,4 +14,10 @@ func LogFatal(message string) {
 	err := fmt.Errorf(message)
 	log.Print(err)
 	panic(err)
+}
+
+func LogError(message string, err error) error {
+	wrapped := fmt.Errorf(message + " -- %w",err)
+	log.Print(wrapped)
+	return wrapped
 }
