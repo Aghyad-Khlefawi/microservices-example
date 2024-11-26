@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorporateManagement.API", "CorporateManagement.API.csproj", "{197F8746-4492-49FD-A275-A26535D8C1B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorporateManagement.Tests.Functional", "..\..\tests\CorporateManagement.Tests.Functional\CorporateManagement.Tests.Functional.csproj", "{EAD3F6A3-EF25-4FDD-B2C5-FA56BD9E0B5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{197F8746-4492-49FD-A275-A26535D8C1B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197F8746-4492-49FD-A275-A26535D8C1B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{197F8746-4492-49FD-A275-A26535D8C1B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAD3F6A3-EF25-4FDD-B2C5-FA56BD9E0B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD3F6A3-EF25-4FDD-B2C5-FA56BD9E0B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD3F6A3-EF25-4FDD-B2C5-FA56BD9E0B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD3F6A3-EF25-4FDD-B2C5-FA56BD9E0B5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

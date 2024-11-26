@@ -1,3 +1,4 @@
+using CorporateManagement.API;
 using CorporateManagement.API.Corporates.Endpoints;
 using CorporateManagement.API.Infrastructure.Data;
 using CorporateManagement.API.Infrastructure.Endpoints;
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDb(builder.Configuration);
 
-builder.Services.AddValidatorsFromAssembly(typeof(CreateCorporate).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(AssemblyMarker).Assembly);
 
 var app = builder.Build();
 
@@ -20,6 +21,7 @@ app.MapGroup("/corporate")
    .MapEndpoint<CreateEmployee>();
 
 
+app.SeedDb();
 app.Run();
 
 
