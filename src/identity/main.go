@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/aghyad-khlefawi/identity/api"
@@ -15,6 +16,10 @@ import (
 )
 
 func main() {
+
+	log.Println("Service starting up")
+
+
 	config := loadConfig()
 	sc:= configureServices(config)
 	
@@ -30,11 +35,15 @@ func main() {
 
 func configureServices(config map[string] string) *servicecollection.ServiceCollection{
   
+  log.Println("Configuring application services")
+
 	//DB configuration
 	dbConnection,ok:= config["DbConnection"]
 	if !ok {
 		utils.LogFatal("Couldn't find the database connection string in the configurations")
 	}
+
+	log.Println("Conneting to database")
 	client, err:= mongo.Connect(context.TODO(),options.Client().ApplyURI(dbConnection))
 
 	if err!=nil{
@@ -46,6 +55,9 @@ func configureServices(config map[string] string) *servicecollection.ServiceColl
 
 
 func loadConfig() map[string]string {
+
+	log.Println("Reading configurations")
+
 	err := godotenv.Load()
 
 	if err != nil {
