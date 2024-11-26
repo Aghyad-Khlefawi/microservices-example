@@ -21,6 +21,7 @@ app.MapGroup("/corporate")
    .MapEndpoint<CreateEmployee>();
 
 
+app.SeedDb();
 app.Run();
 
 

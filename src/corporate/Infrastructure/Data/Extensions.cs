@@ -19,9 +19,10 @@ public static class Extensions
       var client = new MongoClient(connection);
       return client;
     });
-
-    DbSeeder.SeedDb(services.BuildServiceProvider().GetRequiredService<IMongoClient>());
-
-
+  }
+  
+  public static void SeedDb(this WebApplication app)
+  {
+    DbSeeder.SeedDb(app.Services.GetRequiredService<IMongoClient>());
   }
 }
