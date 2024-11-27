@@ -4,9 +4,16 @@ import (
 	"net/http"
 )
 
-
-func HandleServerError(message string,err error, w http.ResponseWriter){
+func HandleServerError(message string, err error, w http.ResponseWriter) {
 	LogError(message, err)
-	w.WriteHeader(http.StatusInternalServerError)
-	WriteJsonContent(w,struct{msg string}{msg:message})
+	error:=WriteJsonContent(w, Message {Msg: message},http.StatusInternalServerError)
+	LogError("Message Serialization failed",error)
+}
+
+func HandleBadRequest(message string, w http.ResponseWriter) {
+	WriteJsonContent(w, Message {Msg: message},http.StatusBadRequest)
+}
+
+type Message struct{
+	Msg string `json:"msg"`
 }

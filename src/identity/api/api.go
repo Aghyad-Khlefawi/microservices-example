@@ -19,7 +19,8 @@ func RegisterRoutes(mux *chi.Mux,sc * servicecollection.ServiceCollection) {
 		sc,
 	}
 
-  mux.Post("/user",NewHandler(HandleCreateUser, context));
+ mux.Post("/user",NewHandler(HandleCreateUser, context));
+ mux.Post("/auth",NewHandler(HandleAuthenticateUser, context));
 
   mux.Get("/hc", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

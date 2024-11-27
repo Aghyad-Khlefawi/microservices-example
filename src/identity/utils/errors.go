@@ -12,12 +12,12 @@ func LogFatalError(message string, err error) {
 
 func LogFatal(message string) {
 	err := fmt.Errorf(message)
-	log.Print(err)
+	log.Print(err.Error())
 	panic(err)
 }
 
 func LogError(message string, err error) error {
 	wrapped := fmt.Errorf(message + " -- %w",err)
-	log.Print(wrapped)
+	log.Print(err)
 	return wrapped
 }
