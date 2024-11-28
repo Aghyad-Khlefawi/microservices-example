@@ -43,8 +43,9 @@ func HandleAuthenticateUser(c *gin.Context, api *ApiContext) {
 	if err != nil {
 		utils.HandleServerError("Failed to generate a token", err, c)
 	}
-
+  
 	utils.WriteJsonContent(c, AuthenticateUserResponse{Token: token}, http.StatusOK)
+
 	return
 }
 

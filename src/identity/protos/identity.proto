@@ -6,6 +6,7 @@ package google.protobuf;
 option go_package = "pkg/grpc";
 option csharp_namespace="Identity.Grpc";
 
+import "google/protobuf/struct.proto";
 
 service IdentityService{
   rpc ValidateToken(ValidateTokenRequest) returns(ValidateTokenResponse);
@@ -17,5 +18,6 @@ message ValidateTokenRequest{
 
 message ValidateTokenResponse{
   bool IsValid = 1;
-  string message = 2;
+  string Message = 2;
+  google.protobuf.Struct Claims=3;
 }

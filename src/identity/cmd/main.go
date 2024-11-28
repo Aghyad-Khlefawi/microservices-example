@@ -14,6 +14,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
+
+	pb "github.com/aghyad-khlefawi/identity/pkg/grpc"
 )
 
 func main() {
@@ -32,6 +34,8 @@ func main() {
 
 func startGrpcServer(){
 	gs:=grpc.NewServer()
+	pb.RegisterIdentityServiceServer(gs, 		pb.NewIdentityService())
+
 	lis,err:= net.Listen("tcp",":5001")
 	if err!=nil{
 		utils.LogFatalError("Failed to start GRPC server",err)

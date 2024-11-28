@@ -25,5 +25,5 @@ install-proto:
 	wget https://github.com/protocolbuffers/protobuf/releases/download/v29.0/protoc-29.0-linux-x86_64.zip
 	sudo unzip protoc-29.0-linux-x86_64.zip -d /usr/local/protoc
 	sudo mv /usr/local/protoc/bin/protoc /usr/local/bin/protoc
-	sudo mv -v /usr/local/protoc/include /usr/local/include/
+	sudo mv -v /usr/local/protoc/include/* /usr/local/include/.
 	sudo rm -rf /usr/local/protoc

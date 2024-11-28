@@ -10,7 +10,18 @@
     <ItemGroup>
       <PackageReference Include="FluentValidation" Version="11.11.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
       <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Protobuf Include="..\identity\protos\identity.proto" GrpcServices="Client">
+        <Link>Protos\identity.proto</Link>
+      </Protobuf>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Infrastructure\Identity\" />
     </ItemGroup>
 
 </Project>

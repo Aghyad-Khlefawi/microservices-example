@@ -11,7 +11,7 @@ import (
 
 func GenerateJwt(username string)(string,error){
 	token:= jwt.NewWithClaims(jwt.SigningMethodHS256,jwt.MapClaims{
-		"username":username,
+		"sub":username,
 		"exp":time.Now().Add(time.Hour*24).Unix(),
 	})
 
@@ -22,14 +22,13 @@ func GenerateJwt(username string)(string,error){
 }
 
 
-func VerifyToken(tokenStr string) (bool,error){
+func VerifyToken(tokenStr string) (bool,map[string]interface{},error){
 	token,err := jwt.Parse(tokenStr, func(t *jwt.Token)(interface{},error){
 		return []byte(os.Getenv("TokenKey")),nil
 	})
 
 	if err!=nil{
-		return false,err
+	  return false,nil,err
 	}
-
-	return token.Valid,nil
+	return token.Valid,token.Claims.(jwt.MapClaims),nil
 }
