@@ -1,11 +1,10 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/aghyad-khlefawi/identity/pkg/servicecollection"
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 )
 
 type ApiContext struct{
@@ -13,27 +12,26 @@ type ApiContext struct{
 }
 
 
-func RegisterRoutes(mux *chi.Mux,sc * servicecollection.ServiceCollection) {
+func RegisterRoutes(router *gin.Engine,sc * servicecollection.ServiceCollection) {
 
   context:= &ApiContext{
 		sc,
 	}
 
- mux.Post("/user",NewHandler(HandleCreateUser, context));
- mux.Post("/auth",NewHandler(HandleAuthenticateUser, context));
+ router.POST("/user",NewHandler(HandleCreateUser, context));
+ router.POST("/auth",NewHandler(HandleAuthenticateUser, context));
 
-  mux.Get("/hc", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, "Healthy")
+  router.GET("/hc", func(c *gin.Context) {
+		c.String(http.StatusOK,"Healthy")
 	})
 
 
 }
 
 
-func NewHandler(handler (func(w http.ResponseWriter, r *http.Request, context *ApiContext)), context *ApiContext) (func(http.ResponseWriter, *http.Request)){
+func NewHandler(handler (func(*gin.Context,*ApiContext)), apiContext *ApiContext) (func(*gin.Context)){
 
-	return func(w http.ResponseWriter, r *http.Request) {
-		handler(w,r,context)
+	return func(c *gin.Context) {
+		handler(c,apiContext)
 	}
 }

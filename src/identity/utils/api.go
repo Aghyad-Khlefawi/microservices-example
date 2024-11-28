@@ -2,16 +2,17 @@ package utils
 
 import (
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func HandleServerError(message string, err error, w http.ResponseWriter) {
+func HandleServerError(message string, err error, c *gin.Context) {
 	LogError(message, err)
-	error:=WriteJsonContent(w, Message {Msg: message},http.StatusInternalServerError)
-	LogError("Message Serialization failed",error)
+	WriteJsonContent(c, Message {Msg: message},http.StatusInternalServerError)
 }
 
-func HandleBadRequest(message string, w http.ResponseWriter) {
-	WriteJsonContent(w, Message {Msg: message},http.StatusBadRequest)
+func HandleBadRequest(message string, c *gin.Context) {
+	WriteJsonContent(c, Message {Msg: message},http.StatusBadRequest)
 }
 
 type Message struct{

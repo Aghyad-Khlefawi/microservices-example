@@ -4,12 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/aghyad-khlefawi/identity/api"
 	"github.com/aghyad-khlefawi/identity/pkg/servicecollection"
 	"github.com/aghyad-khlefawi/identity/utils"
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -73,13 +72,14 @@ func loadConfig() map[string]string {
 }
 
 func startRestApi(sc *servicecollection.ServiceCollection) {
-	router := chi.NewRouter()
+	
+	router := gin.Default()
 
 	fmt.Println("HTTP Server listening on port 8080")
 
 	api.RegisterRoutes(router, sc)
 
-	err := http.ListenAndServe(":8080", router)
+	err := router.Run(":8080")
 
 	if err != nil {
 		panic(err.Error())

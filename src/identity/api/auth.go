@@ -6,40 +6,43 @@ import (
 
 	"github.com/aghyad-khlefawi/identity/pkg/models"
 	"github.com/aghyad-khlefawi/identity/utils"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func HandleAuthenticateUser(w http.ResponseWriter, r *http.Request, api *ApiContext) {
-	request, err := utils.DeserializeJsonRequest[AuthenticateUserRequest](r)
+func HandleAuthenticateUser(c *gin.Context, api *ApiContext) {
+	var request AuthenticateUserRequest
+	err := c.BindJSON(&request)
+
 	if err != nil {
-		utils.HandleBadRequest("Invalid request structure", w)
+		utils.HandleBadRequest("Invalid request structure", c)
 		return
 	}
 
 	var user models.User
-	err = api.sc.MongoClient.Database("identity").Collection("users").FindOne(context.TODO(),bson.M {"email": request.Email}).Decode(&user)
+	err = api.sc.MongoClient.Database("identity").Collection("users").FindOne(context.TODO(), bson.M{"email": request.Email}).Decode(&user)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			unauthorized(w)
+			unauthorized(c)
 			return
 		}
-		utils.HandleServerError("Error while authenticating the user", err, w)
+		utils.HandleServerError("Error while authenticating the user", err, c)
 		return
 	}
 
-	if err:=bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(request.Password)); err!=nil {
-		unauthorized(w)
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password)); err != nil {
+		unauthorized(c)
 		return
 	}
-	utils.WriteJsonContent(w, utils.Message{Msg: "Authenticated"},http.StatusOK)
+	utils.WriteJsonContent(c, utils.Message{Msg: "Authenticated"}, http.StatusOK)
 	return
 }
 
-func unauthorized(w http.ResponseWriter) {
-	utils.WriteJsonContent(w, utils.Message{Msg: "Invalid user credentials"}, http.StatusUnauthorized)
+func unauthorized(c *gin.Context) {
+	utils.WriteJsonContent(c, utils.Message{Msg: "Invalid user credentials"}, http.StatusUnauthorized)
 }
 
 type AuthenticateUserRequest struct {
