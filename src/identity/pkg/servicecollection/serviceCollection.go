@@ -13,3 +13,13 @@ func NewServiceCollection(config map[string]string, mongoClient *mongo.Client) *
 		mongoClient,
 	}
 }
+
+func SetDefaultServiceCollection(sc *ServiceCollection){
+	defaultsc = sc
+}
+
+func Default() *ServiceCollection{
+	return defaultsc
+}
+
+var defaultsc *ServiceCollection;

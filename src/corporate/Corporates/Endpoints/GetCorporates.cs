@@ -11,7 +11,7 @@ using MongoDB.Driver;
 namespace CorporateManagement.API.Corporates.Endpoints;
 
 public class GetCorporates: IEndpoint {
-  public static void Map(IEndpointRouteBuilder app) => app.Map("/", async (IMongoClient mongoClientS)=>
+  public static void Map(IEndpointRouteBuilder app) => app.Map("/", async (IMongoClient mongoClient)=>
       {
         TypedResults.Ok(await mongoClient.GetCorporatesCollectionAs<GetCorporatesResponse>().Find(new BsonDocument()).ToListAsync());
       }

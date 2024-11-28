@@ -22,53 +22,52 @@ func main() {
 
 	log.Println("Service starting up")
 
-
 	config := loadConfig()
-	sc:= configureServices(config)
-	
+	sc := configureServices(config)
 
 	startGrpcServer()
 	startRestApi(sc)
 
 }
 
-func startGrpcServer(){
-	gs:=grpc.NewServer()
-	pb.RegisterIdentityServiceServer(gs, 		pb.NewIdentityService())
+func startGrpcServer() {
+	gs := grpc.NewServer()
+	pb.RegisterIdentityServiceServer(gs, pb.NewIdentityService())
 
-	lis,err:= net.Listen("tcp",":5001")
-	if err!=nil{
-		utils.LogFatalError("Failed to start GRPC server",err)
+	lis, err := net.Listen("tcp", ":5001")
+	if err != nil {
+		utils.LogFatalError("Failed to start GRPC server", err)
 	}
-	go func(){
+	go func() {
 		fmt.Println("GRPC Server running on port 5001")
-		err= gs.Serve(lis)
-		if err!=nil{
-			utils.LogFatalError("Failed to start GRPC server",err)
+		err = gs.Serve(lis)
+		if err != nil {
+			utils.LogFatalError("Failed to start GRPC server", err)
 		}
 	}()
 }
 
-func configureServices(config map[string] string) *servicecollection.ServiceCollection{
-  
-  log.Println("Configuring application services")
+func configureServices(config map[string]string) *servicecollection.ServiceCollection {
+
+	log.Println("Configuring application services")
 
 	//DB configuration
-	dbConnection,ok:= config["DbConnection"]
+	dbConnection, ok := config["DbConnection"]
 	if !ok {
 		utils.LogFatal("Couldn't find the database connection string in the configurations")
 	}
 
 	log.Println("Conneting to database")
-	client, err:= mongo.Connect(context.TODO(),options.Client().ApplyURI(dbConnection))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(dbConnection))
 
-	if err!=nil{
+	if err != nil {
 		utils.LogFatalError("Couldn't connecto to the database", err)
 	}
 
-	return servicecollection.NewServiceCollection(config,client)
+	sc := servicecollection.NewServiceCollection(config, client)
+	servicecollection.SetDefaultServiceCollection(sc)
+	return sc
 }
-
 
 func loadConfig() map[string]string {
 
@@ -89,7 +88,7 @@ func loadConfig() map[string]string {
 }
 
 func startRestApi(sc *servicecollection.ServiceCollection) {
-	
+
 	router := gin.Default()
 
 	fmt.Println("HTTP Server listening on port 8080")

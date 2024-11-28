@@ -4,21 +4,25 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     </PropertyGroup>
-
-    <ItemGroup>
+   <ItemGroup>
       <PackageReference Include="FluentValidation" Version="11.11.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="Google.Protobuf" Version="3.29.0" />
       <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.67.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
       <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
     </ItemGroup>
-
     <ItemGroup>
       <Protobuf Include="..\identity\protos\identity.proto" GrpcServices="Client">
         <Link>Protos\identity.proto</Link>
       </Protobuf>
     </ItemGroup>
+
 
     <ItemGroup>
       <Folder Include="Infrastructure\Identity\" />

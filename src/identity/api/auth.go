@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/aghyad-khlefawi/identity/pkg/jwthelper"
-	"github.com/aghyad-khlefawi/identity/pkg/models"
+	"github.com/aghyad-khlefawi/identity/pkg/users"
 	"github.com/aghyad-khlefawi/identity/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,7 +22,7 @@ func HandleAuthenticateUser(c *gin.Context, api *ApiContext) {
 		return
 	}
 
-	var user models.User
+	var user users.User
 	err = api.sc.MongoClient.Database("identity").Collection("users").FindOne(context.TODO(), bson.M{"email": request.Email}).Decode(&user)
 
 	if err != nil {

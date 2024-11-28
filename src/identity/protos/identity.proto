@@ -10,6 +10,7 @@ import "google/protobuf/struct.proto";
 
 service IdentityService{
   rpc ValidateToken(ValidateTokenRequest) returns(ValidateTokenResponse);
+  rpc CreateUser(CreateUserRequest) returns(CreateUserResponse);
 }
 
 message ValidateTokenRequest{
@@ -20,4 +21,14 @@ message ValidateTokenResponse{
   bool IsValid = 1;
   string Message = 2;
   google.protobuf.Struct Claims=3;
+}
+
+message CreateUserRequest{
+  string Email =1;
+  string Password =2;
+  bool GeneratePassword=3;
+}
+
+message CreateUserResponse{
+string UserId = 1;
 }

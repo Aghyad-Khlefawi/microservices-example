@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/aghyad-khlefawi/identity/pkg/jwthelper"
+	"github.com/aghyad-khlefawi/identity/pkg/users"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
@@ -33,4 +34,12 @@ func (imp *IdentityServiceImplementation) ValidateToken(ctx context.Context, req
 		Message: "verified",
 		Claims:  claimsStruct,
 	}, nil
+}
+
+func (imo *IdentityServiceImplementation) CreateUser(ctx context.Context, request *CreateUserRequest) (*CreateUserResponse,error){
+ user,err:= users.CreateUser(request.Email,request.Password,request.GeneratePassword)
+if err!=nil{
+		return nil,err
+	}
+	return &CreateUserResponse{UserId: user.Id.String()},nil
 }

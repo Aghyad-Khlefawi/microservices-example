@@ -7,6 +7,10 @@ export PATH = $(shell printenv PATH):/usr/local/go/bin
 infra-up:
 	docker-compose -f ./src/docker-compose.yaml up -d
 
+corporate-dev:
+	cd ./src/corporate/
+	dotnet run
+
 identity-dev:
 	cd ./src/identity/
 	go run ./cmd/main.go
