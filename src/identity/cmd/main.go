@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 
 	"github.com/aghyad-khlefawi/identity/api"
 	"github.com/aghyad-khlefawi/identity/pkg/servicecollection"
@@ -12,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -22,12 +24,23 @@ func main() {
 	config := loadConfig()
 	sc:= configureServices(config)
 	
+
+	startGrpcServer()
 	startRestApi(sc)
 
+}
 
-	defer func(){
-		if err:= sc.MongoClient.Disconnect(context.TODO()); err!=nil{
-			utils.LogFatalError("Couldn't close the database connection", err)
+func startGrpcServer(){
+	gs:=grpc.NewServer()
+	lis,err:= net.Listen("tcp",":5001")
+	if err!=nil{
+		utils.LogFatalError("Failed to start GRPC server",err)
+	}
+	go func(){
+		fmt.Println("GRPC Server running on port 5001")
+		err= gs.Serve(lis)
+		if err!=nil{
+			utils.LogFatalError("Failed to start GRPC server",err)
 		}
 	}()
 }

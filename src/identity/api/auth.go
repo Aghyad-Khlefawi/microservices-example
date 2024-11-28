@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/aghyad-khlefawi/identity/pkg/jwthelper"
 	"github.com/aghyad-khlefawi/identity/pkg/models"
 	"github.com/aghyad-khlefawi/identity/utils"
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,13 @@ func HandleAuthenticateUser(c *gin.Context, api *ApiContext) {
 		unauthorized(c)
 		return
 	}
-	utils.WriteJsonContent(c, utils.Message{Msg: "Authenticated"}, http.StatusOK)
+
+	token, err := jwthelper.GenerateJwt(user.Email)
+	if err != nil {
+		utils.HandleServerError("Failed to generate a token", err, c)
+	}
+
+	utils.WriteJsonContent(c, AuthenticateUserResponse{Token: token}, http.StatusOK)
 	return
 }
 
@@ -48,4 +55,8 @@ func unauthorized(c *gin.Context) {
 type AuthenticateUserRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type AuthenticateUserResponse struct {
+	Token string `json:"token"`
 }

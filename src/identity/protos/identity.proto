@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package google.protobuf;
+
+
+option go_package = "pkg/grpc";
+option csharp_namespace="Identity.Grpc";
+
+
+service IdentityService{
+  rpc ValidateToken(ValidateTokenRequest) returns(ValidateTokenResponse);
+}
+
+message ValidateTokenRequest{
+  string Token = 1;
+}
+
+message ValidateTokenResponse{
+  bool IsValid = 1;
+  string message = 2;
+}
