@@ -4,8 +4,20 @@ export GOPATH=/usr/local/go/bin
 export GOBIN = /usr/local/go/bin
 export PATH = $(shell printenv PATH):/usr/local/go/bin
 
+up: infra-up dev-up
+	
+
+dev-up:
+	cd deploy
+	docker-compose -f docker-compose.yaml up -d corporate-api identity
+
+dev-down:
+	cd deploy
+	docker-compose -f docker-compose.yaml down corporate-api identity
+
 infra-up:
-	docker-compose -f ./src/docker-compose.yaml up -d
+	cd deploy
+	docker-compose -f docker-compose.yaml up -d mongodb servicebus
 
 corporate-dev:
 	cd ./src/corporate/

@@ -6,15 +6,22 @@ using FluentValidation;
 using Identity.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddDb(builder.Configuration);
 
 builder.Services.AddValidatorsFromAssembly(typeof(AssemblyMarker).Assembly);
 
-builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>((config) =>
+builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>((sp, config) =>
 {
-    config.Address = new Uri("http://localhost:5001");
+  var identityUrl = sp.GetRequiredService<IConfiguration>().GetValue<string>("IdentityServiceGrpcUrl");
+  if (string.IsNullOrEmpty(identityUrl))
+    throw new Exception("Identity service url was not configured");
+  config.Address = new Uri(identityUrl);
 });
+
+if (builder.Configuration.GetValue<bool>("EnableHealthChecks"))
+  builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -22,10 +29,11 @@ var app = builder.Build();
 app.MapGroup("/corporate")
    .MapEndpoint<CreateCorporate>()
    .MapEndpoint<GetCorporates>()
-  
    .MapGroup("/{corporateId}")
    .MapEndpoint<CreateEmployee>();
 
+if (app.Configuration.GetValue<bool>("EnableHealthChecks"))
+  app.MapHealthChecks("/hc");
 
 app.SeedDb();
 app.Run();

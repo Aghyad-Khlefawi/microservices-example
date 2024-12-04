@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  corporate-api:
+    build:
+      context: ../
+      dockerfile: ./deploy/corporate/Dockerfile
+    environment:
+      IdentityServiceGrpcUrl: http://identity:5001
+      EnableHealthChecks: true
+      ConnectionStrings__CorporateDatabase: "mongodb://admin:admin@mongodb"
+    ports:
+      - 8000:8080
+
+  identity:
+    build:
+      context: ../
+      dockerfile: ./deploy/identity/Dockerfile
+    environment:
+      DbConnection: "mongodb://admin:admin@mongodb"
+      TokenKey: "SecretKey"
+    ports:
+      - 8001:8080
+
+  mongodb:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
+
+  servicebus:
+    image: rabbitmq:4.0.3-management
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - 15672:15672
+      - 5672:5672
+ 
