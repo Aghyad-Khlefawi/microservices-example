@@ -1,7 +1,7 @@
 FROM alpine:latest AS base
 EXPOSE 8080
 EXPOSE 5001
-RUN apt-get update && apt-get install -y curl
+RUN apk add curl
 
 FROM golang:latest AS build
 

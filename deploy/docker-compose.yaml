@@ -1,4 +1,4 @@
-version: '3'
+name: hr-app
 
 services:
   corporate-api:
@@ -9,8 +9,16 @@ services:
       IdentityServiceGrpcUrl: http://identity:5001
       EnableHealthChecks: true
       ConnectionStrings__CorporateDatabase: "mongodb://admin:admin@mongodb"
+      CustomConfiguration: "My custom config" 
     ports:
       - 8000:8080
+    depends_on:
+      mongodb:
+        condition: service_started
+        restart: true
+      identity:
+        condition: service_healthy
+        restart: true
 
   identity:
     build:
@@ -21,7 +29,11 @@ services:
       TokenKey: "SecretKey"
     ports:
       - 8001:8080
-
+    depends_on:
+      mongodb:
+        condition: service_started
+        restart: true
+ 
   mongodb:
     image: mongo
     restart: always
@@ -40,4 +52,10 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
- 
+
+  mail-server:
+    image: maildev/maildev:latest
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+

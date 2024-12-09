@@ -10,14 +10,19 @@ up: infra-up dev-up
 dev-up:
 	cd deploy
 	docker-compose -f docker-compose.yaml up -d corporate-api identity
-
+dev-up-recreate:
+	cd deploy
+	docker-compose -f docker-compose.yaml up -d --build --force-recreate corporate-api identity
 dev-down:
 	cd deploy
 	docker-compose -f docker-compose.yaml down corporate-api identity
 
 infra-up:
 	cd deploy
-	docker-compose -f docker-compose.yaml up -d mongodb servicebus
+	docker-compose -f docker-compose.yaml up -d mongodb servicebus mail-server
+infra-down:
+	cd deploy
+	docker-compose -f docker-compose.yaml up -d mongodb servicebus mail-server
 
 corporate-dev:
 	cd ./src/corporate/

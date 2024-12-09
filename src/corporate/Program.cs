@@ -35,6 +35,11 @@ app.MapGroup("/corporate")
 if (app.Configuration.GetValue<bool>("EnableHealthChecks"))
   app.MapHealthChecks("/hc");
 
+app.MapGet("/config", (IConfiguration configuration) =>
+{
+  return Results.Ok(configuration.GetValue<string>("CustomConfiguration"));
+});
+
 app.SeedDb();
 app.Run();
 
