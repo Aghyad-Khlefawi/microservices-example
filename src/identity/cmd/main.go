@@ -61,8 +61,8 @@ func configureServices() *servicecollection.ServiceCollection {
 	log.Println("Conneting to database")
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(dbConnection))
 
-	if err != nil {
-		utils.LogFatalError("Couldn't connecto to the database", err)
+	if err != nil && os.Getenv("IgnoreDbError") != "true"{
+		utils.LogFatalError("Couldn't connect to the database", err)
 	}
 
 	sc := servicecollection.NewServiceCollection(client)
